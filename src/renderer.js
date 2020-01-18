@@ -7,6 +7,7 @@ const fs = require("fs")
 const path = require('path')
 const {ipcRenderer} = require('electron')
 const Editor = require('tui-editor')
+const Tabulator = require('tabulator-tables')
 
 // Connect to python server and check
 let client = new zerorpc.Client({ timeout: 300000})
