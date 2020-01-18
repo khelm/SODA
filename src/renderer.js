@@ -81,6 +81,14 @@ var pathSamples
 const curateDatasetBtn = document.getElementById('button-curate-dataset')
 const bfUploadDatasetBtn = document.getElementById('button-upload-dataset')
 
+// Prepare metadata
+const saveContributorBtn = document.getElementById('button-save-contributor')
+const addContributorBtn = document.getElementById('button-add-contributor')
+const saveMilestoneBtn = document.getElementById('button-save-milestone')
+const addMilestoneBtn = document.getElementById('button-add-milestone')
+const saveAwardBtn = document.getElementById('button-save-award')
+const addAwardBtn = document.getElementById('button-add-award')
+
 // Manage datasets
 const keyName = document.querySelector('#bf-key-name')
 const key = document.querySelector('#bf-key')
@@ -184,7 +192,27 @@ const sadCan = '<img class="message-icon" src="assets/img/can-sad.png">'
 // Operations on JavaScript end only
 //////////////////////////////////
 
+// Buttons to save and load Metadata Information
+saveContributorBtn.addEventListener('click', () => {
+  tableHTML(table)
+  console.log("saved!")
+})
+
 // Button selection to move on to next step
+document.getElementById('button-metadata-next-step').addEventListener('click', (event) => {
+  document.getElementById('button-prepare-metadata-demo-toggle').click()
+  if (getComputedStyle(document.getElementById('div-submission-file'), null).display === 'none'){
+    document.getElementById('button-submission-demo-toggle').click()
+  }
+})
+
+document.getElementById('button-submission-next-step').addEventListener('click', (event) => {
+  document.getElementById('button-submission-demo-toggle').click()
+  if (getComputedStyle(document.getElementById('div-description-file'), null).display === 'none'){
+    document.getElementById('button-description-demo-toggle').click()
+  }
+})
+
 document.getElementById('button-organize-next-step').addEventListener('click', (event) => {
   document.getElementById('button-specfy-dataset-demo-toggle').click()
   if (getComputedStyle(document.getElementById('div-file-conversion'), null).display === 'none'){
@@ -214,6 +242,88 @@ document.getElementById('button-validate-dataset-next-step').addEventListener('c
 //////////////////////////////////
 // Operations on JavaScript end only
 //////////////////////////////////
+
+var contributorInfo = [
+  {title:"Name (Last, First)", field:"name", editor:"input"},
+  {title:"ORCHID ID", field:"id", editor:"input"},
+  {title:"Contributor Affiliation", field:"affiliation", editor: "input"}
+];
+
+var awardInfo = [
+  {title:"Award Name", field:"name", editor:"input"},
+  {title:"Number", field:"id", editor:"input"},
+];
+
+var milestoneInfo = [
+  {title:"Milestone", field:"name", editor:"input"},
+  {title:"Completion Date", field:"date", editor:"input"},
+];
+
+//Prepare Tables for metadata
+var table_con = new Tabulator("#div-contributor-spreadsheet", {
+	layout:"fitColumns",      //fit columns to width of table
+	tooltips:true,            //show tool tips on cells
+	addRowPos:"bottom",          //when adding a new row, add it to the top of the table
+	history:true,             //allow undo and redo actions on the table
+	movableColumns:true,      //allow column order to be changed
+	resizableRows:true,       //allow row order to be changed
+	initialSort:[             //set the initial sort order of the data
+		{column:"name", dir:"asc"},
+	],
+  columns: contributorInfo,
+  autoColumns: true
+});
+// Initiate an empty row
+table_con.addData([{"":""}])
+
+var table_milestone = new Tabulator("#div-milestone-spreadsheet", {
+	layout:"fitColumns",      //fit columns to width of table
+	tooltips:true,            //show tool tips on cells
+	addRowPos:"top",          //when adding a new row, add it to the top of the table
+	history:true,             //allow undo and redo actions on the table
+	movableColumns:true,      //allow column order to be changed
+	resizableRows:true,       //allow row order to be changed
+	initialSort:[             //set the initial sort order of the data
+		{column:"name", dir:"asc"},
+	],
+  columns: milestoneInfo,
+  autoColumns: true
+});
+// Initiate an empty row
+table_milestone.addData([{"":""}])
+
+var table_award = new Tabulator("#div-award-spreadsheet", {
+	layout:"fitColumns",      //fit columns to width of table
+	tooltips:true,            //show tool tips on cells
+	addRowPos:"top",          //when adding a new row, add it to the top of the table
+	history:true,             //allow undo and redo actions on the table
+	movableColumns:true,      //allow column order to be changed
+	resizableRows:true,       //allow row order to be changed
+	initialSort:[             //set the initial sort order of the data
+		{column:"name", dir:"asc"},
+	],
+  columns: awardInfo,
+  autoColumns: true
+});
+// Initiate an empty row
+table_award.addData([{"":""}])
+
+// //Add row on "Add Row" button click
+addContributorBtn.addEventListener('click', () => {
+    table_con.addData([{"":""}])
+});
+
+// //Delete row on "Delete Row" button click
+// $("#del-row").click(function(){
+//     table.deleteRow(1);
+// });
+
+// Get data as HTML file
+function tableHTML(element) {
+    var htmlElement = element.getHtml()
+    console.log(htmlElement)
+}
+
 
 // Select organized dataset folder and populate table
 selectDatasetBtn.addEventListener('click', (event) => {

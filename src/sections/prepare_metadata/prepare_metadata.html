@@ -1,19 +1,156 @@
 <!DOCTYPE html>
 <template class="task-template">
   <section id="prepare_metadata-section" class="section js-section u-category-windows">
+
     <header class="section-header">
 
       <div class="section-wrapper">
         <h1>
-          <img class="section-icon" src="assets/img/metadata-teal.png">
           Prepare Metadata
         </h1>
-        <h3>This interface will help you prepare metadata files. Assistance will be provided with auto-filled fields based on pre-saved information when applicable (e.g., grant number, investigator's ORCID, etc.) 
-        <br>
-        <br>
-        Coming soon... Tentative date: February 2020</h3>
+        <h3>This interface will help you prepare metadata files. Assistance will be provided with auto-filled fields based on pre-saved information when applicable (e.g., grant number, investigator's ORCID, etc.)
+        </h3>
       </div>
     </header>
 
-  </section>
+
+    <div class="demo">
+        <div class="demo-wrapper">
+          <button id="button-prepare-metadata-demo-toggle" class="js-container-target demo-toggle-button"> Prepare Metadata Information
+            <a style="padding:0px 0px 0px 10px" href="https://www.youtube.com/watch?v=WDvH8dIcsBA">
+              <img class="nav-video" src="assets/img/play-video-icon.png">
+            </a>
+            <div class="demo-meta u-avoid-clicks"> Edit and Save Information regarding Grant Number, Contributors, and Milestones
+            </div>
+          </button>
+          <div id="div-add-metadata" class="demo-box">
+
+            <form id = 'form-add-metadata'>
+              <div style = "padding:10px 0px">
+                <input id="input-add-award" name="add-metadata" type="radio" class="with-style" />
+                <label for="input-add-award" class="labelradio"> Add SPARC award numbers </label>
+                  <div class="tooltipnew"><img class="info" src="assets/img/info.png">
+                    <span class="tooltiptext">Select this option to add and save SPARC award numbers for later use
+                    </span>
+                  </div>
+              </div>
+              <!–- This div is for radio button: Add Milestones --!>
+              <div id="div-add-award">
+                <h5> View/Edit Award Information
+                </h5>
+                <div id="div-award-spreadsheet">
+                </div>
+                <div class="demo-controls">
+                  <button id="button-add-award" class="demo-button">Add</button>
+                  <button id="button-save-award" class="demo-button">Save</button>
+                </div>
+              </div>
+              <div style = "padding:10px 0px">
+                <input id="input-add-contributor" name="add-metadata" type="radio" class="with-style" />
+                <label for="input-add-contributor" class="labelradio"> Add contributors </label>
+                  <div class="tooltipnew"><img class="info" src="assets/img/info.png">
+                    <span class="tooltiptext">Select this option to add and save contributors to your dataset
+                    </span>
+                  </div>
+              </div>
+              <!–- This div is for radio button: Add Contributor --!>
+              <div id="div-add-contributor">
+                <h5> View/Edit Contributor Information
+                </h5>
+                <div id="div-contributor-spreadsheet">
+                </div>
+                <div class="demo-controls">
+                  <button id="button-add-contributor" class="demo-button">Add</button>
+                  <button id="button-save-contributor" class="demo-button">Save</button>
+                </div>
+              </div>
+
+              <div style = "padding:10px 0px">
+                <input id="input-add-milestone" name="add-metadata" type="radio" class="with-style" />
+                <label for="input-add-milestone" class="labelradio"> Add milestones </label>
+                  <div class="tooltipnew"><img class="info" src="assets/img/info.png">
+                    <span class="tooltiptext">Select this option to add and save Sparc Milestones of your dataset
+                    </span>
+                  </div>
+              </div>
+              <!–- This div is for radio button: Add Milestones --!>
+              <div id="div-add-milestone">
+                <h5> View/Edit Milestone Information
+                </h5>
+                <div id="div-milestone-spreadsheet">
+                </div>
+                <div class="demo-controls">
+                  <button id="button-add-milestone" class="demo-button">Add</button>
+                  <button id="button-save-milestone" class="demo-button">Save</button>
+                </div>
+              </div>
+            </form>
+            <div id="div-metadata-next-step" align="right">
+              <h5> </h5>
+              <button id="button-metadata-next-step" class="demo-button"> Next step </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo">
+        <div class="demo-wrapper">
+          <button id="button-submission-demo-toggle" class="js-container-target demo-toggle-button"> Prepare your Submission file
+           <!--  <a style="padding:0px 0px 0px 10px" href="https://www.youtube.com/watch?v=T_AHgEUXFAA&feature=youtu.be" >
+              <img class="nav-video" src="assets/img/play-video-icon.png">
+            </a> -->
+            <div class="demo-meta u-avoid-clicks"> Edit/Save the submission file to include in your dataset  </div>
+          </button>
+          <div id="div-submission-file" class="demo-box">
+            <p> </p>
+            <div id="div-submission-next-step" align="right">
+              <button id="button-submission-next-step" class="demo-button"> Next step </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo">
+        <div class="demo-wrapper">
+          <button id="button-description-demo-toggle" class="js-container-target demo-toggle-button"> Prepare your Dataset Description file
+           <!--  <a style="padding:0px 0px 0px 10px" href="https://www.youtube.com/watch?v=T_AHgEUXFAA&feature=youtu.be" >
+              <img class="nav-video" src="assets/img/play-video-icon.png">
+            </a> -->
+            <div class="demo-meta u-avoid-clicks"> Edit/Save the Dataset Description file to include in your dataset  </div>
+          </button>
+          <div id="div-description-file" class="demo-box">
+          </div>
+        </div>
+      </div>
+
+        <!-- <div id="Samples" class="tabcontent">
+          <p>
+            Let's prepare Samples file for your dataset!
+          </p>
+        </div>
+
+        <div id="Subjects" class="tabcontent">
+          <p>
+              Let's prepare the Subjects file for your dataset!
+          </p>
+        </div> -->
+
+    </div>
+
+    <script src="renderer.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      require('./renderer-process/curate/radio-buttons-display')
+    </script>
+    <script type="text/javascript" src="./node_modules/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <script type="text/javascript" src="./node_modules/tabulator-tables/dist/js/tabulator.js"></script>
+    <!-- <script type="text/javascript">
+      require('./node_modules/jsuites/dist/jsuites.basic.js')
+    </script>
+    <script type="text/javascript">
+      require('./node_modules/jsuites/dist/jsuites.js') -->
+    </script>
+
+</section>
 </template>
+
+      <!-- End of container -->
