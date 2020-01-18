@@ -355,10 +355,10 @@ const tuiInstance = new Editor({
 })
 
 
-function countCharacters(textelement, pelement) {                                          
-  var textEntered = textelement.value;  
+function countCharacters(textelement, pelement) {
+  var textEntered = textelement.value;
   var counter = (256 - (textEntered.length));
-  pelement.innerHTML = counter + ' characters remaining' 
+  pelement.innerHTML = counter + ' characters remaining'
 }
 
 bfNewDatasetSubtitle.addEventListener('keyup',  function(){
@@ -944,10 +944,10 @@ ipcRenderer.on('selected-banner-image', (event, path) => {
     bfViewImportedImage.src = path[0]
     myCropper.destroy()
     myCropper = new Cropper(bfViewImportedImage, cropOptions)
-    }  
+    }
   })
 
-bfSaveBannerImageBtn.addEventListener('click', (event) => { 
+bfSaveBannerImageBtn.addEventListener('click', (event) => {
   datasetBannerImageStatus.innerHTML = ""
   if (bfViewImportedImage.src.length > 0){
     if (formBannerHeight.value>1023 && formBannerWidth.value>1023){

@@ -141,7 +141,6 @@ document.querySelector('#no-samples').addEventListener('click', () => {
     showNoSamples()
 })
 
-
 function showPreorganizedDataset(){
   document.getElementById('div-pre-organized-dataset').style.display ='block';
   document.getElementById('div-organize-dataset').style.display ='none';
@@ -163,6 +162,7 @@ function showOrganizeDataset(){
   document.getElementById('div-clear-table').style.display ='block';
   document.getElementById('div-existing-dataset').style.display ='none';
 }
+
 
 document.querySelector('#preorganized-dataset').addEventListener('click', () => {
     showPreorganizedDataset()
