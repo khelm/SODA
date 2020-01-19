@@ -243,25 +243,28 @@ document.getElementById('button-validate-dataset-next-step').addEventListener('c
 // Operations on JavaScript end only
 //////////////////////////////////
 
+
+
+// Create Metadata Tables
 var contributorInfo = [
-  {title:"Name (Last, First)", field:"name", editor:"input"},
-  {title:"ORCHID ID", field:"id", editor:"input"},
-  {title:"Contributor Affiliation", field:"affiliation", editor: "input"}
+  {title:"Name (Last, First)", field:"name", editor:"input", width:300},
+  {title:"ORCHID ID", field:"id", editor:"input", width: 270},
+  {title:"Contributor Affiliation", field:"affiliation", editor: "input", width:260}
 ];
 
 var awardInfo = [
-  {title:"Award Name", field:"name", editor:"input"},
-  {title:"Number", field:"id", editor:"input"},
+  {title:"Award Name", field:"name", editor:"input", width:400},
+  {title:"Number", field:"id", editor:"input", width:430},
 ];
 
 var milestoneInfo = [
-  {title:"Milestone", field:"name", editor:"input"},
-  {title:"Completion Date", field:"date", editor:"input"},
+  {title:"Milestone", field:"name", editor:"input", width:450},
+  {title:"Completion Date", field:"date", editor:dateEditor, width:380},
 ];
 
 //Prepare Tables for metadata
 var table_con = new Tabulator("#div-contributor-spreadsheet", {
-	layout:"fitColumns",      //fit columns to width of table
+  data: [{" ":" "}],
 	tooltips:true,            //show tool tips on cells
 	addRowPos:"bottom",          //when adding a new row, add it to the top of the table
 	history:true,             //allow undo and redo actions on the table
@@ -270,14 +273,12 @@ var table_con = new Tabulator("#div-contributor-spreadsheet", {
 	initialSort:[             //set the initial sort order of the data
 		{column:"name", dir:"asc"},
 	],
-  columns: contributorInfo,
-  autoColumns: true
+  columns: contributorInfo
 });
-// Initiate an empty row
-table_con.addData([{"":""}])
+table_con.addData([{"": ""}])
 
 var table_milestone = new Tabulator("#div-milestone-spreadsheet", {
-	layout:"fitColumns",      //fit columns to width of table
+  data: [{" ":" "}],
 	tooltips:true,            //show tool tips on cells
 	addRowPos:"top",          //when adding a new row, add it to the top of the table
 	history:true,             //allow undo and redo actions on the table
@@ -287,36 +288,23 @@ var table_milestone = new Tabulator("#div-milestone-spreadsheet", {
 		{column:"name", dir:"asc"},
 	],
   columns: milestoneInfo,
-  autoColumns: true
 });
-// Initiate an empty row
-table_milestone.addData([{"":""}])
+table_milestone.addData([{"": ""}])
 
 var table_award = new Tabulator("#div-award-spreadsheet", {
-	layout:"fitColumns",      //fit columns to width of table
+	// layout:"fitColumns",      //fit columns to width of table
+  data: [{" ":" "}],
 	tooltips:true,            //show tool tips on cells
-	addRowPos:"top",          //when adding a new row, add it to the top of the table
-	history:true,             //allow undo and redo actions on the table
 	movableColumns:true,      //allow column order to be changed
 	resizableRows:true,       //allow row order to be changed
-	initialSort:[             //set the initial sort order of the data
-		{column:"name", dir:"asc"},
-	],
-  columns: awardInfo,
-  autoColumns: true
+  columns: awardInfo
+  // autoColumns: false
 });
-// Initiate an empty row
-table_award.addData([{"":""}])
-
+table_award.addData([{"": ""}])
 // //Add row on "Add Row" button click
 addContributorBtn.addEventListener('click', () => {
     table_con.addData([{"":""}])
 });
-
-// //Delete row on "Delete Row" button click
-// $("#del-row").click(function(){
-//     table.deleteRow(1);
-// });
 
 // Get data as HTML file
 function tableHTML(element) {
