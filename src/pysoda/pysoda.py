@@ -5,7 +5,21 @@
 import platform
 import os
 from os import listdir, stat, makedirs, mkdir, walk, remove, pardir
-from os.path import isdir, isfile, join, splitext, getmtime, basename, normpath, exists, expanduser, split, dirname, getsize, abspath
+from os.path import (
+    isdir,
+    isfile,
+    join,
+    splitext,
+    getmtime,
+    basename,
+    normpath,
+    exists,
+    expanduser,
+    split,
+    dirname,
+    getsize,
+    abspath
+)
 import pandas as pd
 import time
 from time import strftime, localtime
@@ -20,6 +34,13 @@ import re
 import gevent
 from blackfynn import Blackfynn
 from urllib.request import urlopen
+import json
+import logging
+
+HOMEPATH = expanduser("~")
+LOGPATH = join(HOMEPATH, "SODA")
+
+logging.basicConfig(filename=join(LOGPATH, 'pysoda.log'), level=logging.DEBUG)
 
 ### Global variables
 curateprogress = ' '
@@ -290,6 +311,43 @@ def mycopyfile_with_metadata(src, dst, *, follow_symlinks=True):
     shutil.copystat(src, dst)
     return dst
 
+### Prepare metadata
+SAVED_INFO_PATH = join(HOMEPATH, "SODA", "METADATA")
+CON_FILEPATH = join(SAVED_INFO_PATH, "contributors.xlsx")
+MILESTONE_FILEPATH = join(SAVED_INFO_PATH, "milestones.xlsx")
+AWARD_FILEPATH = join(SAVED_INFO_PATH, "awards.json")
+
+
+def save_metadata(json_str, filepath):
+    #Tabulator adds extra empty key,val pairs ("":"")
+    directory = dirname(filepath)
+    if not exists(directory):
+        makedirs(directory)
+    with open(filepath, "w") as f:
+        f.write(json_str)
+
+def load_metadata(filepath):
+    with open(filepath) as f:
+        return f.read()
+
+def save_contributors(json_str):
+    return save_metadata(json_str, CON_FILEPATH)
+
+def load_contributors():
+    return load_metadata(CON_FILEPATH)
+
+def save_milestones(json_str):
+    return save_metadata(json_str, MILESTONE_FILEPATH)
+
+def load_milestones():
+    return load_metadata(MILESTONE_FILEPATH)
+
+## TODO: make save_attribute code reusable and modular
+def save_awards(json_str):
+    return save_metadata(json_str, AWARD_FILEPATH)
+
+def load_awards():
+    return load_metadata(AWARD_FILEPATH)
 
 ### Prepare dataset
 def save_file_organization(jsonpath, jsondescription, pathsavefileorganization):
@@ -1175,9 +1233,9 @@ def bf_submit_dataset(accountname, bfdataset, pathdataset):
 
     if c>0:
         submitdatastatus = 'Done'
-        raise Exception(error)  
+        raise Exception(error)
 
-    total_file_size = total_file_size - 1  
+    total_file_size = total_file_size - 1
     # if total_file_size == 0:
     #     submitdatastatus = 'Done'
     #     error = 'Error: Please select a non-empty local dataset'
@@ -1389,7 +1447,7 @@ def bf_get_current_user_permission(selected_bfaccount, selected_bfdataset):
             role = list_dataset_permission[i]['role']
             if current_user_email == email:
                 res = role
-                c +=1 
+                c +=1
         if c == 0:
             res = "No permission"
         return res

@@ -42,8 +42,9 @@
                 </div>
                 <h5> </h5>
                 <div class="demo-controls">
-                  <button id="button-add-award" class="demo-button">Add Award</button>
-                  <button id="button-save-award" class="demo-button">Save</button>
+                  <button id="button-add-award" type="button" class="demo-button">Add Award</button>
+                  <button id="button-save-award" type="button" class="demo-button">Save</button>
+                  <p id='para-save-award-status'> <p>
                 </div>
               </div>
               <div style = "padding:10px 0px">
@@ -62,8 +63,9 @@
                 </div>
                 <h5> </h5>
                 <div class="demo-controls">
-                  <button id="button-add-contributor" class="demo-button">Add Contributor</button>
+                  <button id="button-add-contributor" type="button" class="demo-button">Add Contributor</button>
                   <button id="button-save-contributor" class="demo-button">Save</button>
+                  <p id='para-save-contributor-status'> <p>
                 </div>
               </div>
 
@@ -84,7 +86,8 @@
                 <h5> </h5>
                 <div class="demo-controls">
                   <button id="button-add-milestone" type="button" class="demo-button">Add Milestone</button>
-                  <button id="button-save-milestone" class="demo-button">Save</button>
+                  <button id="button-save-milestone" type="button" class="demo-button">Save</button>
+                  <p id='para-save-milestone-status'> <p>
                 </div>
               </div>
             </form>
@@ -141,19 +144,10 @@
     </div>
 
     <script src="renderer.js" type="text/javascript"></script>
-    <script type="text/javascript">
-      require('./renderer-process/curate/radio-buttons-display')
-    </script>
     <script type="text/javascript" src="./node_modules/tabulator-tables/dist/js/tabulator.min.js"></script>
     <script type="text/javascript" src="./node_modules/tabulator-tables/dist/js/tabulator.js"></script>
-    <!-- <script type="text/javascript">
-      require('./node_modules/jsuites/dist/jsuites.basic.js')
-    </script>
-    <script type="text/javascript">
-      require('./node_modules/jsuites/dist/jsuites.js') -->
+    <script type="text/javascript" src="./node_modules/js-datepicker/dist/datepicker.min.js"></script>
     </script>
 
 </section>
 </template>
-
-      <!-- End of container -->

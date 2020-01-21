@@ -3,6 +3,14 @@ function showAwardInfo(){
     document.getElementById('div-add-award').style.display ='block';
     document.getElementById('div-add-contributor').style.display ='none';
     document.getElementById('div-add-milestone').style.display ='none';
+    client.invoke("api_load_awards", (error, res) => {
+    if (error) {
+      console.log(error)
+      }
+    else {
+      table_award.setData(JSON.parse(res))
+      }
+    })
 }
 document.querySelector('#input-add-award').addEventListener('click', () => {
     showAwardInfo()

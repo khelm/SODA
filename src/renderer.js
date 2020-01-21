@@ -8,6 +8,7 @@ const path = require('path')
 const {ipcRenderer} = require('electron')
 const Editor = require('tui-editor')
 const Tabulator = require('tabulator-tables')
+// const datepicker = require('js-datepicker')
 
 // Connect to python server and check
 let client = new zerorpc.Client({ timeout: 300000})
@@ -84,7 +85,7 @@ const bfUploadDatasetBtn = document.getElementById('button-upload-dataset')
 // Prepare metadata
 const saveContributorBtn = document.getElementById('button-save-contributor')
 const addContributorBtn = document.getElementById('button-add-contributor')
-const saveMilestoneBtn = document.getElementById('button-save-milestone')
+const saveMilestoneBtn = document.getElementById('button-milestone')
 const addMilestoneBtn = document.getElementById('button-add-milestone')
 const saveAwardBtn = document.getElementById('button-save-award')
 const addAwardBtn = document.getElementById('button-add-award')
@@ -192,12 +193,6 @@ const sadCan = '<img class="message-icon" src="assets/img/can-sad.png">'
 // Operations on JavaScript end only
 //////////////////////////////////
 
-// Buttons to save and load Metadata Information
-saveContributorBtn.addEventListener('click', () => {
-  tableHTML(table)
-  console.log("saved!")
-})
-
 // Button selection to move on to next step
 document.getElementById('button-metadata-next-step').addEventListener('click', (event) => {
   document.getElementById('button-prepare-metadata-demo-toggle').click()
@@ -244,74 +239,59 @@ document.getElementById('button-validate-dataset-next-step').addEventListener('c
 //////////////////////////////////
 
 
-
-// Create Metadata Tables
+// Create Metadata Columns
 var contributorInfo = [
-  {title:"Name (Last, First)", field:"name", editor:"input", width:300},
+  {title:"Name (Last, First)", field:"name", editor:"input", width:260},
   {title:"ORCHID ID", field:"id", editor:"input", width: 270},
-  {title:"Contributor Affiliation", field:"affiliation", editor: "input", width:260}
+  {title:"Contributor Affiliation", field:"affiliation", editor: "input", width:300}
 ];
 
 var awardInfo = [
-  {title:"Award Name", field:"name", editor:"input", width:400},
-  {title:"Number", field:"id", editor:"input", width:430},
+  {title:"Award Name", field:"award-name", width:400, editor:"input"},
+  {title:"Number", field:"award-number", editor:"input", width:430}
 ];
 
 var milestoneInfo = [
   {title:"Milestone", field:"name", editor:"input", width:450},
-  {title:"Completion Date", field:"date", editor:dateEditor, width:380},
+  {title:"Completion Date", field:"date", editor:"input", width:380},
 ];
 
 //Prepare Tables for metadata
 var table_con = new Tabulator("#div-contributor-spreadsheet", {
-  data: [{" ":" "}],
 	tooltips:true,            //show tool tips on cells
 	addRowPos:"bottom",          //when adding a new row, add it to the top of the table
 	history:true,             //allow undo and redo actions on the table
 	movableColumns:true,      //allow column order to be changed
-	resizableRows:true,       //allow row order to be changed
 	initialSort:[             //set the initial sort order of the data
 		{column:"name", dir:"asc"},
 	],
   columns: contributorInfo
 });
-table_con.addData([{"": ""}])
+
 
 var table_milestone = new Tabulator("#div-milestone-spreadsheet", {
-  data: [{" ":" "}],
 	tooltips:true,            //show tool tips on cells
 	addRowPos:"top",          //when adding a new row, add it to the top of the table
 	history:true,             //allow undo and redo actions on the table
 	movableColumns:true,      //allow column order to be changed
-	resizableRows:true,       //allow row order to be changed
 	initialSort:[             //set the initial sort order of the data
 		{column:"name", dir:"asc"},
 	],
   columns: milestoneInfo,
 });
-table_milestone.addData([{"": ""}])
 
 var table_award = new Tabulator("#div-award-spreadsheet", {
-	// layout:"fitColumns",      //fit columns to width of table
-  data: [{" ":" "}],
-	tooltips:true,            //show tool tips on cells
 	movableColumns:true,      //allow column order to be changed
-	resizableRows:true,       //allow row order to be changed
   columns: awardInfo
-  // autoColumns: false
-});
-table_award.addData([{"": ""}])
-// //Add row on "Add Row" button click
-addContributorBtn.addEventListener('click', () => {
-    table_con.addData([{"":""}])
 });
 
-// Get data as HTML file
-function tableHTML(element) {
-    var htmlElement = element.getHtml()
-    console.log(htmlElement)
-}
-
+// Add empty row on "Add Row" button click
+function addEmptyRow(table){
+  table.addRow([{"":""}])
+};
+addContributorBtn.addEventListener('click', function(){addEmptyRow(table_con)});
+addMilestoneBtn.addEventListener('click', function(){addEmptyRow(table_milestone)});
+addAwardBtn.addEventListener('click', function(){addEmptyRow(table_award)});
 
 // Select organized dataset folder and populate table
 selectDatasetBtn.addEventListener('click', (event) => {
@@ -471,6 +451,40 @@ bfDatasetSubtitle.addEventListener('keyup',  function(){
 //////////////////////////////////
 // Operations calling to pysoda.py functions //
 //////////////////////////////////
+
+// Function to load tables automatically
+// var award_load = load_award()
+//
+// function load_award (){
+//     client.invoke("api_load_awards", (error, res) => {
+//        if(error) {
+//          console.error(error)
+//          var emessage = userError(error)
+//          document.getElementById("para-save-award-status").innerHTML = "<span style='color: red;'> " + emessage + "</span>"
+//        } else {
+//          var table = new Tabulator("#table_award", {})
+//          var tableData = res
+//          table.setData(tableData)
+//        }
+//    })
+// };
+
+// Function to save metadata to Excel spreadsheet
+saveAwardBtn.addEventListener('click', function(){
+  json_file = table_award.getData();
+  json_str = JSON.stringify(json_file);
+  console.log(json_file);
+  client.invoke("api_save_awards", json_str, (error, res) => {
+       if(error) {
+         console.error(error)
+         var emessage = userError(error)
+         document.getElementById("para-save-award-status").innerHTML = "<span style='color: red;'> " + emessage + "</span>"
+       } else {
+         document.getElementById("para-save-award-status").innerHTML = "<span style='color: red;'>Saved!</span>"
+       }
+   })
+});
+
 
 // Action when user click on "Save" file organization button
 selectSaveFileOrganizationBtn.addEventListener('click', (event) => {
