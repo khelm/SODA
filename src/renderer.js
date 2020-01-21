@@ -247,8 +247,20 @@ var contributorInfo = [
 ];
 
 var awardInfo = [
-  {title:"Award Name", field:"award-name", width:400, editor:"input"},
-  {title:"Number", field:"award-number", editor:"input", width:430}
+  {title:"Award Name", field:"award-name", width:390, editor:"input"},
+  {title:"Number", field:"award-number", editor:"input", width:405},
+  {formatter: 'buttonCross',
+    width: 13,
+    align: 'center',
+    headerSort: false,
+    cellClick: function(e, cell) {
+      var txt;
+      var r = confirm("Delete this Award number?");
+      if (r == true) {
+        cell.getRow().delete();
+      }
+    }
+  }
 ];
 
 var milestoneInfo = [
