@@ -247,10 +247,11 @@ var contributorInfo = [
 ];
 
 var awardInfo = [
-  {title:"Award Name", field:"award-name", width:390, editor:"input"},
-  {title:"Number", field:"award-number", editor:"input", width:405},
+  {formatter:"rownum", widthGrow: 1},
+  {title:"Award Name", field:"award-name", editor:"input", widthGrow: 5},
+  {title:"Number", field:"award-number", editor:"input", widthGrow: 5},
   {formatter: 'buttonCross',
-    width: 13,
+    widthGrow: 1,
     align: 'center',
     headerSort: false,
     cellClick: function(e, cell) {
@@ -293,7 +294,8 @@ var table_milestone = new Tabulator("#div-milestone-spreadsheet", {
 });
 
 var table_award = new Tabulator("#div-award-spreadsheet", {
-	movableColumns:true,      //allow column order to be changed
+  layout:"fitColumns",
+  selectable:true,
   columns: awardInfo
 });
 
