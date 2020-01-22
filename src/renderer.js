@@ -295,7 +295,6 @@ var table_milestone = new Tabulator("#div-milestone-spreadsheet", {
 
 var table_award = new Tabulator("#div-award-spreadsheet", {
   layout:"fitColumns",
-  selectable:true,
   columns: awardInfo
 });
 
@@ -485,9 +484,10 @@ bfDatasetSubtitle.addEventListener('keyup',  function(){
 
 // Function to save metadata to Excel spreadsheet
 saveAwardBtn.addEventListener('click', function(){
-  json_file = table_award.getData();
-  json_str = JSON.stringify(json_file);
-  console.log(json_file);
+  // filter out empty rows
+  json_arr = table_award.getData().filter(row => row["award-name"] !== undefined && row["award-number"] !== undefined);
+  json_str = JSON.stringify(json_arr);
+  console.log(json_arr);
   client.invoke("api_save_awards", json_str, (error, res) => {
        if(error) {
          console.error(error)
