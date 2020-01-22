@@ -85,7 +85,7 @@ const bfUploadDatasetBtn = document.getElementById('button-upload-dataset')
 // Prepare metadata
 const saveContributorBtn = document.getElementById('button-save-contributor')
 const addContributorBtn = document.getElementById('button-add-contributor')
-const saveMilestoneBtn = document.getElementById('button-milestone')
+const saveMilestoneBtn = document.getElementById('button-save-milestone')
 const addMilestoneBtn = document.getElementById('button-add-milestone')
 const saveAwardBtn = document.getElementById('button-save-award')
 const addAwardBtn = document.getElementById('button-add-award')
@@ -239,11 +239,24 @@ document.getElementById('button-validate-dataset-next-step').addEventListener('c
 //////////////////////////////////
 
 
-// Create Metadata Columns
+// Create Metadata Tables
 var contributorInfo = [
-  {title:"Name (Last, First)", field:"name", editor:"input", width:260},
-  {title:"ORCHID ID", field:"id", editor:"input", width: 270},
-  {title:"Contributor Affiliation", field:"affiliation", editor: "input", width:300}
+  {formatter:"rownum", widthGrow: 1},
+  {title:"Name (Last, First)", field:"name-con", editor:"input", widthGrow:4},
+  {title:"ORCHID ID", field:"id-con", editor:"input", widthGrow:4},
+  {title:"Contributor Affiliation", field:"affiliation", editor: "input", widthGrow:4},
+  {formatter: 'buttonCross',
+    widthGrow: 1,
+    align: 'center',
+    headerSort: false,
+    cellClick: function(e, cell) {
+      var txt;
+      var r = confirm("Delete this Contributor?");
+      if (r == true) {
+        cell.getRow().delete();
+      }
+    }
+  }
 ];
 
 var awardInfo = [
@@ -265,32 +278,33 @@ var awardInfo = [
 ];
 
 var milestoneInfo = [
-  {title:"Milestone", field:"name", editor:"input", width:450},
-  {title:"Completion Date", field:"date", editor:"input", width:380},
+  {formatter:"rownum", widthGrow: 1},
+  {title:"Milestone", field:"milestone", editor:"input", widthGrow:5},
+  {title:"Completion Date", field: "milestone-date", editor:"input", widthGrow:5},
+  {formatter: 'buttonCross',
+    widthGrow: 1,
+    align: 'center',
+    headerSort: false,
+    cellClick: function(e, cell) {
+      var txt;
+      var r = confirm("Delete this Milestone?");
+      if (r == true) {
+        cell.getRow().delete();
+      }
+    }
+  }
 ];
 
 //Prepare Tables for metadata
 var table_con = new Tabulator("#div-contributor-spreadsheet", {
-	tooltips:true,            //show tool tips on cells
-	addRowPos:"bottom",          //when adding a new row, add it to the top of the table
-	history:true,             //allow undo and redo actions on the table
-	movableColumns:true,      //allow column order to be changed
-	initialSort:[             //set the initial sort order of the data
-		{column:"name", dir:"asc"},
-	],
+  layout:"fitColumns",
   columns: contributorInfo
 });
 
 
 var table_milestone = new Tabulator("#div-milestone-spreadsheet", {
-	tooltips:true,            //show tool tips on cells
-	addRowPos:"top",          //when adding a new row, add it to the top of the table
-	history:true,             //allow undo and redo actions on the table
-	movableColumns:true,      //allow column order to be changed
-	initialSort:[             //set the initial sort order of the data
-		{column:"name", dir:"asc"},
-	],
-  columns: milestoneInfo,
+  layout:"fitColumns",
+  columns: milestoneInfo
 });
 
 var table_award = new Tabulator("#div-award-spreadsheet", {
@@ -482,7 +496,7 @@ bfDatasetSubtitle.addEventListener('keyup',  function(){
 //    })
 // };
 
-// Function to save metadata to Excel spreadsheet
+// Function to "Save" metadata to Excel spreadsheet
 saveAwardBtn.addEventListener('click', function(){
   // filter out empty rows
   json_arr = table_award.getData().filter(row => row["award-name"] !== undefined && row["award-number"] !== undefined);
@@ -498,7 +512,36 @@ saveAwardBtn.addEventListener('click', function(){
        }
    })
 });
-
+saveContributorBtn.addEventListener('click', function(){
+  // filter out empty rows
+  json_arr = table_con.getData().filter(row => row["name-con"] !== undefined && row["id-con"] !== undefined && row["affiliation"] !== undefined);
+  json_str = JSON.stringify(json_arr);
+  console.log(json_arr);
+  client.invoke("api_save_contributors", json_str, (error, res) => {
+       if(error) {
+         console.error(error)
+         var emessage = userError(error)
+         document.getElementById("para-save-contributor-status").innerHTML = "<span style='color: red;'> " + emessage + "</span>"
+       } else {
+         document.getElementById("para-save-contributor-status").innerHTML = "<span style='color: red;'>Saved!</span>"
+       }
+   })
+});
+saveMilestoneBtn.addEventListener('click', function(){
+  // filter out empty rows
+  json_arr = table_milestone.getData().filter(row => row["milestone"] !== undefined && row["milestone-date"] !== undefined);
+  json_str = JSON.stringify(json_arr);
+  console.log(json_arr);
+  client.invoke("api_save_milestones", json_str, (error, res) => {
+       if(error) {
+         console.error(error)
+         var emessage = userError(error)
+         document.getElementById("para-save-milestone-status").innerHTML = "<span style='color: red;'> " + emessage + "</span>"
+       } else {
+         document.getElementById("para-save-milestone-status").innerHTML = "<span style='color: red;'>Saved!</span>"
+       }
+   })
+});
 
 // Action when user click on "Save" file organization button
 selectSaveFileOrganizationBtn.addEventListener('click', (event) => {

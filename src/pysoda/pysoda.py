@@ -312,9 +312,10 @@ def mycopyfile_with_metadata(src, dst, *, follow_symlinks=True):
     return dst
 
 ### Prepare metadata
+HOMEPATH = expanduser("~")
 SAVED_INFO_PATH = join(HOMEPATH, "SODA", "METADATA")
-CON_FILEPATH = join(SAVED_INFO_PATH, "contributors.xlsx")
-MILESTONE_FILEPATH = join(SAVED_INFO_PATH, "milestones.xlsx")
+CON_FILEPATH = join(SAVED_INFO_PATH, "contributors.json")
+MILESTONE_FILEPATH = join(SAVED_INFO_PATH, "milestones.json")
 AWARD_FILEPATH = join(SAVED_INFO_PATH, "awards.json")
 
 

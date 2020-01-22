@@ -12,22 +12,38 @@ function showAwardInfo(){
       }
     })
 }
+function showContributorInfo() {
+  document.getElementById('div-add-contributor').style.display ='block';
+  document.getElementById('div-add-award').style.display ='none';
+  document.getElementById('div-add-milestone').style.display ='none';
+  client.invoke("api_load_contributors", (error, res) => {
+  if (error) {
+    console.log(error)
+    }
+  else {
+    table_con.setData(JSON.parse(res))
+    }
+  })
+}
+function showMilestoneInfo() {
+  document.getElementById('div-add-milestone').style.display ='block';
+  document.getElementById('div-add-award').style.display ='none';
+  document.getElementById('div-add-contributor').style.display ='none';
+  client.invoke("api_load_milestones", (error, res) => {
+  if (error) {
+    console.log(error)
+    }
+  else {
+    table_milestone.setData(JSON.parse(res))
+    }
+  })
+}
 document.querySelector('#input-add-award').addEventListener('click', () => {
     showAwardInfo()
 })
-function showContributorInfo(){
-    document.getElementById('div-add-contributor').style.display ='block';
-    document.getElementById('div-add-award').style.display ='none';
-    document.getElementById('div-add-milestone').style.display ='none';
-}
 document.querySelector('#input-add-contributor').addEventListener('click', () => {
     showContributorInfo()
 })
-function showMilestoneInfo(){
-    document.getElementById('div-add-milestone').style.display ='block';
-    document.getElementById('div-add-award').style.display ='none';
-    document.getElementById('div-add-contributor').style.display ='none';
-}
 document.querySelector('#input-add-milestone').addEventListener('click', () => {
     showMilestoneInfo()
 })
