@@ -23,3 +23,15 @@ ipcMain.on('save-file-dialog-saveorganization', (event) => {
     event.sender.send('selected-saveorganizationfile', filename)
   })
 })
+
+ipcMain.on('save-file-dialog-submission', (event) => {
+  const options = {
+    title: 'Location to save your submission.xlsx',
+    filters: [
+      { name: 'Excel', extensions: ['xlsx'] }
+    ]
+  }
+  dialog.showSaveDialog(options, (filename) => {
+    event.sender.send('selected-savesubmissionfile', filename)
+  })
+})

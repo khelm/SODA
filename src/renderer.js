@@ -90,6 +90,9 @@ const addMilestoneBtn = document.getElementById('button-add-milestone')
 const saveAwardBtn = document.getElementById('button-save-award')
 const addAwardBtn = document.getElementById('button-add-award')
 
+// Prepare Submission File
+const saveSubmissionBtn = document.getElementById('button-save-submission')
+
 // Manage datasets
 const keyName = document.querySelector('#bf-key-name')
 const key = document.querySelector('#bf-key')
@@ -195,41 +198,41 @@ const sadCan = '<img class="message-icon" src="assets/img/can-sad.png">'
 
 // Button selection to move on to next step
 document.getElementById('button-metadata-next-step').addEventListener('click', (event) => {
-  document.getElementById('button-prepare-metadata-demo-toggle').click()
   if (getComputedStyle(document.getElementById('div-submission-file'), null).display === 'none'){
-    document.getElementById('button-submission-demo-toggle').click()
+    document.getElementById('button-submission-demo-toggle').click();
+    document.getElementById('button-prepare-metadata-demo-toggle').click()
   }
 })
 
 document.getElementById('button-submission-next-step').addEventListener('click', (event) => {
-  document.getElementById('button-submission-demo-toggle').click()
   if (getComputedStyle(document.getElementById('div-description-file'), null).display === 'none'){
     document.getElementById('button-description-demo-toggle').click()
+    document.getElementById('button-submission-demo-toggle').click()
   }
 })
 
 document.getElementById('button-organize-next-step').addEventListener('click', (event) => {
-  document.getElementById('button-specfy-dataset-demo-toggle').click()
   if (getComputedStyle(document.getElementById('div-file-conversion'), null).display === 'none'){
     document.getElementById('button-file-conversion-demo-toggle').click()
+    document.getElementById('button-specfy-dataset-demo-toggle').click()
   }
 })
 document.getElementById('button-file-conversion-next-step').addEventListener('click', (event) => {
-  document.getElementById('button-file-conversion-demo-toggle').click()
   if (getComputedStyle(document.getElementById('div-specify-metadata'), null).display === 'none'){
     document.getElementById('button-specify-metadata-demo-toggle').click()
+    document.getElementById('button-file-conversion-demo-toggle').click()
   }
 })
 document.getElementById('button-specify-metadata-next-step').addEventListener('click', (event) => {
-  document.getElementById('button-specify-metadata-demo-toggle').click()
   if (getComputedStyle(document.getElementById('div-validate-dataset'), null).display === 'none'){
     document.getElementById('button-validate-dataset-demo-toggle').click()
+    document.getElementById('button-specify-metadata-demo-toggle').click()
   }
 })
 document.getElementById('button-validate-dataset-next-step').addEventListener('click', (event) => {
-  document.getElementById('button-validate-dataset-demo-toggle').click()
   if (getComputedStyle(document.getElementById('div-generate-dataset'), null).display === 'none'){
     document.getElementById('button-generate-dataset-demo-toggle').click()
+    document.getElementById('button-validate-dataset-demo-toggle').click()
   }
 })
 
@@ -238,18 +241,17 @@ document.getElementById('button-validate-dataset-next-step').addEventListener('c
 // Operations on JavaScript end only
 //////////////////////////////////
 
+/////////Prepare Metadata Section/////////////
+/////////////////////////////////////////////
 
-// Create Metadata Tables
+////////// Create Metadata Tables////////////
 var contributorInfo = [
   {formatter:"rownum", widthGrow: 1},
   {title:"Name (Last, First)", field:"name-con", editor:"input", widthGrow:4},
   {title:"ORCHID ID", field:"id-con", editor:"input", widthGrow:4},
   {title:"Contributor Affiliation", field:"affiliation", editor: "input", widthGrow:4},
-  {formatter: 'buttonCross',
-    widthGrow: 1,
-    align: 'center',
-    headerSort: false,
-    cellClick: function(e, cell) {
+  {formatter: 'buttonCross', widthGrow: 1, align: 'center', headerSort: false,
+   cellClick: function(e, cell) {
       var txt;
       var r = confirm("Delete this Contributor?");
       if (r == true) {
@@ -258,60 +260,47 @@ var contributorInfo = [
     }
   }
 ];
-
 var awardInfo = [
   {formatter:"rownum", widthGrow: 1},
   {title:"Award Name", field:"award-name", editor:"input", widthGrow: 5},
   {title:"Number", field:"award-number", editor:"input", widthGrow: 5},
-  {formatter: 'buttonCross',
-    widthGrow: 1,
-    align: 'center',
-    headerSort: false,
-    cellClick: function(e, cell) {
+  {formatter: 'buttonCross', widthGrow: 1, align: 'center', headerSort: false,
+   cellClick: function(e, cell) {
       var txt;
       var r = confirm("Delete this Award number?");
       if (r == true) {
-        cell.getRow().delete();
-      }
+        cell.getRow().delete();}
     }
   }
 ];
-
+// const picker = datepicker(".milestone-date")
 var milestoneInfo = [
   {formatter:"rownum", widthGrow: 1},
   {title:"Milestone", field:"milestone", editor:"input", widthGrow:5},
-  {title:"Completion Date", field: "milestone-date", editor:"input", widthGrow:5},
-  {formatter: 'buttonCross',
-    widthGrow: 1,
-    align: 'center',
-    headerSort: false,
-    cellClick: function(e, cell) {
+  {title:"Completion Date", field: "milestone-date", widthGrow:5, editor: "input"},
+  // function(cell) {return datepicker(cell)},
+  {formatter: 'buttonCross', widthGrow: 1, align: 'center', headerSort: false,
+   cellClick: function(e, cell) {
       var txt;
       var r = confirm("Delete this Milestone?");
       if (r == true) {
         cell.getRow().delete();
-      }
+        }
     }
   }
 ];
-
-//Prepare Tables for metadata
 var table_con = new Tabulator("#div-contributor-spreadsheet", {
   layout:"fitColumns",
-  columns: contributorInfo
+  columns: contributorInfo,
 });
-
-
 var table_milestone = new Tabulator("#div-milestone-spreadsheet", {
   layout:"fitColumns",
   columns: milestoneInfo
 });
-
 var table_award = new Tabulator("#div-award-spreadsheet", {
   layout:"fitColumns",
-  columns: awardInfo
+  columns: awardInfo,
 });
-
 // Add empty row on "Add Row" button click
 function addEmptyRow(table){
   table.addRow([{"":""}])
@@ -319,6 +308,21 @@ function addEmptyRow(table){
 addContributorBtn.addEventListener('click', function(){addEmptyRow(table_con)});
 addMilestoneBtn.addEventListener('click', function(){addEmptyRow(table_milestone)});
 addAwardBtn.addEventListener('click', function(){addEmptyRow(table_award)});
+
+/////////Prepare Submission File///////////////////////
+var submissionInfo = [
+  {title:"Submission Item", field:"submission0", editor:"input", widthGrow:4, align:"center"},
+  {title:"Value", field:"submission1", editor:"input", widthGrow:4, align:"center"}
+];
+var table_submission = new Tabulator("#div-submission-spreadsheet", {
+  layout:"fitColumns",
+  columns: submissionInfo,
+  data: [{submission0:"SPARC Award Number", submission1:""},
+        {submission0:"Milestone", submission1:""},
+        {submission0:"Milestone Completion Date", submission1:""}]
+});
+
+////////////////////End of Prepare Metadata Section////////////////////
 
 // Select organized dataset folder and populate table
 selectDatasetBtn.addEventListener('click', (event) => {
@@ -478,23 +482,6 @@ bfDatasetSubtitle.addEventListener('keyup',  function(){
 //////////////////////////////////
 // Operations calling to pysoda.py functions //
 //////////////////////////////////
-
-// Function to load tables automatically
-// var award_load = load_award()
-//
-// function load_award (){
-//     client.invoke("api_load_awards", (error, res) => {
-//        if(error) {
-//          console.error(error)
-//          var emessage = userError(error)
-//          document.getElementById("para-save-award-status").innerHTML = "<span style='color: red;'> " + emessage + "</span>"
-//        } else {
-//          var table = new Tabulator("#table_award", {})
-//          var tableData = res
-//          table.setData(tableData)
-//        }
-//    })
-// };
 
 // Function to "Save" metadata to Excel spreadsheet
 saveAwardBtn.addEventListener('click', function(){

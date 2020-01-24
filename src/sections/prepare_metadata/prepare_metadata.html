@@ -17,9 +17,9 @@
     <div class="demo">
         <div class="demo-wrapper">
           <button id="button-prepare-metadata-demo-toggle" class="js-container-target demo-toggle-button"> Prepare Metadata Information
-            <a style="padding:0px 0px 0px 10px" href="https://www.youtube.com/watch?v=WDvH8dIcsBA">
+            <!-- <a style="padding:0px 0px 0px 10px">
               <img class="nav-video" src="assets/img/play-video-icon.png">
-            </a>
+            </a> -->
             <div class="demo-meta u-avoid-clicks"> Edit and Save Information regarding Grant Number, Contributors, and Milestones
             </div>
           </button>
@@ -110,6 +110,15 @@
           </button>
           <div id="div-submission-file" class="demo-box">
             <p> </p>
+            <div id="div-add-submission" align="center">
+              <h5> Specify information to include in the Submission file to your dataset</h5>
+              <div id="div-submission-spreadsheet" style="width:80%"></div>
+              <h5> </h5>
+              <div class="demo-controls">
+                <button id="button-save-submission" type="button" style="font-size: 1em; margin-left: 80px" class="demo-button">Save</button>
+                <p id='para-save-submission-status'> <p>
+              </div>
+            </div>
             <div id="div-submission-next-step" align="right">
               <button id="button-submission-next-step" class="demo-button"> Next step </button>
             </div>
@@ -130,25 +139,12 @@
         </div>
       </div>
 
-        <!-- <div id="Samples" class="tabcontent">
-          <p>
-            Let's prepare Samples file for your dataset!
-          </p>
-        </div>
-
-        <div id="Subjects" class="tabcontent">
-          <p>
-              Let's prepare the Subjects file for your dataset!
-          </p>
-        </div> -->
-
     </div>
 
     <script src="renderer.js" type="text/javascript"></script>
     <script type="text/javascript" src="./node_modules/tabulator-tables/dist/js/tabulator.min.js"></script>
     <script type="text/javascript" src="./node_modules/tabulator-tables/dist/js/tabulator.js"></script>
     <script type="text/javascript" src="./node_modules/js-datepicker/dist/datepicker.min.js"></script>
-    </script>
 
 </section>
 </template>

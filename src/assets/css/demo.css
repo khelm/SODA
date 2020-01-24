@@ -559,3 +559,7 @@ label.input-banner-img{
   padding-left: 10px;
   color: black;
 }
+/*Style for tabulator ColumnHeader*/
+.tabulator-col-title {
+  text-align: center;
+}

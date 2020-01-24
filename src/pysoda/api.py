@@ -5,7 +5,8 @@ from pysoda import submit_dataset_progress, curate_dataset_progress, save_file_o
     bf_submit_dataset, bf_new_dataset_folder, bf_add_permission, bf_get_users, bf_get_permission, \
     bf_get_teams, bf_add_permission_team, bf_add_subtitle, bf_get_subtitle, bf_get_description, \
     bf_add_description, bf_get_banner_image, bf_add_banner_image, bf_get_license, bf_add_license, \
-    save_awards, load_awards, save_contributors, load_contributors, save_milestones, load_milestones
+    save_awards, load_awards, save_contributors, load_contributors, save_milestones, load_milestones, \
+    save_submission_file
 
 import sys
 import zerorpc
