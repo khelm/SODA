@@ -27,6 +27,10 @@ class SodaApi(object):
     def api_load_milestones(self):
         return load_milestones()
 
+    ### Save Submission file
+    def api_save_submission_file(self, filepath, val_arr):
+        return save_submission_file(filepath, val_arr)
+
     ### Curate dataset
     def api_save_file_organization(self, jsonpath, jsondescription, pathsavefileorganization):
         try:

@@ -35,12 +35,8 @@ import gevent
 from blackfynn import Blackfynn
 from urllib.request import urlopen
 import json
-import logging
 
-HOMEPATH = expanduser("~")
-LOGPATH = join(HOMEPATH, "SODA")
-
-logging.basicConfig(filename=join(LOGPATH, 'pysoda.log'), level=logging.DEBUG)
+from openpyxl import load_workbook
 
 ### Global variables
 curateprogress = ' '
@@ -327,6 +323,7 @@ def save_metadata(json_str, filepath):
     with open(filepath, "w") as f:
         f.write(json_str)
 
+
 def load_metadata(filepath):
     with open(filepath) as f:
         return f.read()
@@ -349,6 +346,23 @@ def save_awards(json_str):
 
 def load_awards():
     return load_metadata(AWARD_FILEPATH)
+
+### Prepare and save submission file
+def save_submission_file(filepath, json_str):
+    source = r"C:\Users\Tram Ngo\Desktop\SRC\SODA\src\file_templates\submission.xlsx"
+    destination = filepath
+    shutil.copyfile(source, destination)
+    # json array to python list
+    val_arr = json.loads(json_str)
+    # write to excel file
+    wb = load_workbook(destination)
+    ws1 = wb['Sheet1']
+    ws1["C2"] = val_arr[0]
+    ws1["C3"] = val_arr[1]
+    ws1["C4"] = val_arr[2]
+
+    wb.save(destination)
+
 
 ### Prepare dataset
 def save_file_organization(jsonpath, jsondescription, pathsavefileorganization):

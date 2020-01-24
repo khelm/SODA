@@ -82,7 +82,7 @@ var pathSamples
 const curateDatasetBtn = document.getElementById('button-curate-dataset')
 const bfUploadDatasetBtn = document.getElementById('button-upload-dataset')
 
-// Prepare metadata
+// Prepare metadata info
 const saveContributorBtn = document.getElementById('button-save-contributor')
 const addContributorBtn = document.getElementById('button-add-contributor')
 const saveMilestoneBtn = document.getElementById('button-save-milestone')
@@ -249,7 +249,7 @@ var contributorInfo = [
   {formatter:"rownum", widthGrow: 1},
   {title:"Name (Last, First)", field:"name-con", editor:"input", widthGrow:4},
   {title:"ORCHID ID", field:"id-con", editor:"input", widthGrow:4},
-  {title:"Contributor Affiliation", field:"affiliation", editor: "input", widthGrow:4},
+  {title:"Contributor Affiliation", field:"affiliation", editor: "input", widthGrow:5},
   {formatter: 'buttonCross', widthGrow: 1, align: 'center', headerSort: false,
    cellClick: function(e, cell) {
       var txt;
@@ -525,10 +525,43 @@ saveMilestoneBtn.addEventListener('click', function(){
          var emessage = userError(error)
          document.getElementById("para-save-milestone-status").innerHTML = "<span style='color: red;'> " + emessage + "</span>"
        } else {
+         console.log(document.getElementById("div-submission-spreadsheet").offsetWidth)
          document.getElementById("para-save-milestone-status").innerHTML = "<span style='color: red;'>Saved!</span>"
        }
    })
 });
+// Action when users click on "save" submission file
+saveSubmissionBtn.addEventListener('click', (event) => {
+  ipcRenderer.send('save-file-dialog-submission')
+  document.getElementById("para-save-submission-status").innerHTML = ""
+  clearStrings()
+});
+
+ipcRenderer.on('selected-savesubmissionfile', (event, path) => {
+  if (path.length > 0){
+    document.getElementById("para-save-submission-status").innerHTML = ""
+    json_arr = table_submission.getData();
+    json_val = [];
+    json_val.push(json_arr[0]["submission1"]);
+    json_val.push(json_arr[1]["submission1"]);
+    json_val.push(json_arr[2]["submission1"]);
+    console.log(json_val);
+    json_str = JSON.stringify(json_val);
+    // // Call python to save
+    if (path != null){
+        client.invoke("api_save_submission_file", path, json_str, (error, res) => {
+            if(error) {
+              console.error(error)
+              var emessage = userError(error)
+              document.getElementById("para-save-file-organization-status").innerHTML = "<span style='color: red;'> " + emessage + "</span>"
+            } else {
+              document.getElementById("para-save-file-organization-status").innerHTML = "Saved!"
+            }
+        })
+  }
+}
+})
+
 
 // Action when user click on "Save" file organization button
 selectSaveFileOrganizationBtn.addEventListener('click', (event) => {

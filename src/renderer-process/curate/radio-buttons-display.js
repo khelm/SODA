@@ -8,7 +8,7 @@ function showAwardInfo(){
       console.log(error)
       }
     else {
-      table_award.setData(JSON.parse(res))
+      table_award.setData(JSON.parse(res));
       }
     })
 }
