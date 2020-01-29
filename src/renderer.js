@@ -92,6 +92,12 @@ const addAwardBtn = document.getElementById('button-add-award')
 
 // Prepare Submission File
 const saveSubmissionBtn = document.getElementById('button-save-submission')
+const awardArray = document.getElementById("select-award");
+const milestoneArray = document.getElementById("select-milestone");
+const alreadyExistAward = document.querySelector('#input-choose-existing-award')
+const newAward = document.querySelector('#input-new-award')
+const alreadyExistMilestone = document.querySelector('#input-choose-existing-milestone')
+const newMilestone = document.querySelector('#input-new-milestone')
 
 // Manage datasets
 const keyName = document.querySelector('#bf-key-name')
@@ -245,6 +251,7 @@ document.getElementById('button-validate-dataset-next-step').addEventListener('c
 /////////////////////////////////////////////
 
 ////////// Create Metadata Tables////////////
+
 var contributorInfo = [
   {formatter:"rownum", widthGrow: 1},
   {title:"Name (Last, First)", field:"name-con", editor:"input", widthGrow:4},
