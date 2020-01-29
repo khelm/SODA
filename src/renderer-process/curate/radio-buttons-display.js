@@ -14,6 +14,23 @@ function showMilestoneInfo() {
   document.getElementById('div-add-award').style.display ='none';
   document.getElementById('div-add-contributor').style.display ='none';
 }
+function showExistingAwards() {
+  document.getElementById('div-existing-award').style.display ='block';
+  document.getElementById('div-new-award').style.display ='none';
+}
+function showNewAwards() {
+  document.getElementById('div-new-award').style.display ='block';
+  document.getElementById('div-existing-award').style.display ='none';
+}
+function showExistingMilestones() {
+  document.getElementById('div-existing-milestone').style.display ='block';
+  document.getElementById('div-new-milestone').style.display ='none';
+}
+function showNewMilestones() {
+  document.getElementById('div-new-milestone').style.display ='block';
+  document.getElementById('div-existing-milestone').style.display ='none';
+}
+
 document.querySelector('#input-add-award').addEventListener('click', () => {
     showAwardInfo();
     table_award.redraw()

@@ -13,7 +13,7 @@ import zerorpc
 
 class SodaApi(object):
 
-    ### Prepare Metadata
+    ### Save and Load Metadata
     def api_save_awards(self, json_str):
         return save_awards(json_str)
     def api_save_contributors(self, json_str):

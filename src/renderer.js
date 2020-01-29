@@ -8,7 +8,7 @@ const path = require('path')
 const {ipcRenderer} = require('electron')
 const Editor = require('tui-editor')
 const Tabulator = require('tabulator-tables')
-// const datepicker = require('js-datepicker')
+const moment = require('moment')
 
 // Connect to python server and check
 let client = new zerorpc.Client({ timeout: 300000})
@@ -203,20 +203,20 @@ const sadCan = '<img class="message-icon" src="assets/img/can-sad.png">'
 //////////////////////////////////
 
 // Button selection to move on to next step
+// Metadata tab
 document.getElementById('button-metadata-next-step').addEventListener('click', (event) => {
-  if (getComputedStyle(document.getElementById('div-submission-file'), null).display === 'none'){
+  if (getComputedStyle(document.getElementById('div-generate-submission-file'), null).display === 'none'){
+    document.getElementById('button-prepare-metadata-demo-toggle').click();
     document.getElementById('button-submission-demo-toggle').click();
-    document.getElementById('button-prepare-metadata-demo-toggle').click()
   }
 })
-
 document.getElementById('button-submission-next-step').addEventListener('click', (event) => {
   if (getComputedStyle(document.getElementById('div-description-file'), null).display === 'none'){
-    document.getElementById('button-description-demo-toggle').click()
     document.getElementById('button-submission-demo-toggle').click()
-  }
+    document.getElementById('button-description-demo-toggle').click()
+    }
 })
-
+// Prepare dataset tab
 document.getElementById('button-organize-next-step').addEventListener('click', (event) => {
   if (getComputedStyle(document.getElementById('div-file-conversion'), null).display === 'none'){
     document.getElementById('button-file-conversion-demo-toggle').click()
@@ -247,16 +247,56 @@ document.getElementById('button-validate-dataset-next-step').addEventListener('c
 // Operations on JavaScript end only
 //////////////////////////////////
 
-/////////Prepare Metadata Section/////////////
-/////////////////////////////////////////////
+////////Prepare Metadata Section/////////
+/////////////////////////////////////////
 
 ////////// Create Metadata Tables////////////
 
+// Function to add datepicker to Tabulator
+var dateEditor = function(cell, onRendered, success, cancel){
+    var cellValue = moment(cell.getValue(), "MM/DD/YYYY").format("YYYY-MM-DD"),
+    input = document.createElement("input");
+    input.setAttribute("type", "date");
+
+    input.style.background = "#fff url('./assets/img/calender1.png')  100% 50% no-repeat";
+    input.style.padding = "2px";
+    input.style.width = "100%";
+    input.style.boxSizing = "border-box";
+    input.style.font = "inherit";
+
+    input.value = cellValue;
+    onRendered(function(){
+        input.focus();
+        input.style.height = "100%";
+    });
+
+    function onChange(){
+        if(input.value != cellValue){
+            success(moment(input.value, "YYYY-MM-DD").format("MM/DD/YYYY"));
+        }else{
+            cancel();
+        }
+    }
+    //submit new value on blur or change
+    input.addEventListener("blur", onChange);
+    //submit new value on enter
+    input.addEventListener("keydown", function(e){
+        if(e.keyCode == 13){
+            onChange();
+        }
+        if(e.keyCode == 27){
+            cancel();
+        }
+    });
+    return input;
+};
+
+// Construct tables
 var contributorInfo = [
   {formatter:"rownum", widthGrow: 1},
   {title:"Name (Last, First)", field:"name-con", editor:"input", widthGrow:4},
   {title:"ORCHID ID", field:"id-con", editor:"input", widthGrow:4},
-  {title:"Contributor Affiliation", field:"affiliation", editor: "input", widthGrow:5},
+  {title:"Contributor Affiliation", field:"affiliation", sorter:"date", editor: "input", widthGrow:5},
   {formatter: 'buttonCross', widthGrow: 1, align: 'center', headerSort: false,
    cellClick: function(e, cell) {
       var txt;
@@ -264,8 +304,7 @@ var contributorInfo = [
       if (r == true) {
         cell.getRow().delete();
       }
-    }
-  }
+  }}
 ];
 var awardInfo = [
   {formatter:"rownum", widthGrow: 1},
@@ -277,14 +316,12 @@ var awardInfo = [
       var r = confirm("Delete this Award number?");
       if (r == true) {
         cell.getRow().delete();}
-    }
-  }
+  }}
 ];
 var milestoneInfo = [
   {formatter:"rownum", widthGrow: 1},
   {title:"Milestone", field:"milestone", editor:"input", widthGrow:5},
-  {title:"Completion Date", field: "milestone-date", widthGrow:5, editor: "input"},
-  // function(cell) {return datepicker(cell)},
+  {title:"Completion Date", field: "milestone-date", widthGrow:5, editor: dateEditor},
   {formatter: 'buttonCross', widthGrow: 1, align: 'center', headerSort: false,
    cellClick: function(e, cell) {
       var txt;
@@ -292,8 +329,7 @@ var milestoneInfo = [
       if (r == true) {
         cell.getRow().delete();
         }
-    }
-  }
+  }}
 ];
 var table_con = new Tabulator("#div-contributor-spreadsheet", {
   layout:"fitColumns",
@@ -319,40 +355,90 @@ addAwardBtn.addEventListener('click', function(){addEmptyRow(table_award)});
 client.invoke("api_load_milestones", (error, res) => {
 if (error) {
   console.log(error)
-  }
-else {
+} else {
   table_milestone.setData(JSON.parse(res))
   }
 });
 client.invoke("api_load_contributors", (error, res) => {
 if (error) {
   console.log(error)
-  }
-else {
+} else {
   table_con.setData(JSON.parse(res))
   }
 });
 client.invoke("api_load_awards", (error, res) => {
 if (error) {
   console.log(error)
-  }
-else {
+} else {
   table_award.setData(JSON.parse(res));
   }
 });
 
-/////////Prepare Submission File///////////////////////
-var submissionInfo = [
-  {title:"Submission Item", field:"submission0", editor:"input", widthGrow:4, align:"center"},
-  {title:"Value", field:"submission1", editor:"input", widthGrow:4, align:"center"}
-];
-var table_submission = new Tabulator("#div-submission-spreadsheet", {
-  layout:"fitColumns",
-  columns: submissionInfo,
-  data: [{submission0:"SPARC Award Number", submission1:""},
-        {submission0:"Milestone", submission1:""},
-        {submission0:"Milestone Completion Date", submission1:""}]
+///////////Prepare Submission File///////////////
+
+/// Function to create dropdown menu ////
+var addOption = function(selectbox, text, value) {
+    var opt = document.createElement("OPTION");
+    opt.text = text;
+    opt.value = value;
+    selectbox.options.add(opt);
+}
+client.invoke("api_load_awards", (error, res) => {
+       if(error) {
+         console.error(error)
+       } else {
+           var result = JSON.parse(res);
+           removeOptions(awardArray);
+           for (var i = 0; i < result.length; i++) {
+                var opt = result[i]["award-name"].concat(" or ", result[i]["award-number"]);
+                addOption(awardArray, opt, opt)}
+            }
 });
+client.invoke("api_load_milestones", (error, res) => {
+       if(error) {
+         console.error(error)
+       } else {
+           var result = JSON.parse(res);
+           removeOptions(milestoneArray);
+           for (var i = 0; i < result.length; i++) {
+              addOption(milestoneArray, result[i]['milestone'], result[i]['milestone'])}
+          }
+});
+// When users click on "Generate Submission File" button
+saveSubmissionBtn.addEventListener('click', (event) => {
+        ipcRenderer.send('save-file-dialog-submission')
+});
+ipcRenderer.on('selected-savesubmissionfile', (event, path) => {
+  if (path.length > 0) {
+    if (alreadyExistAward.checked == true){
+      var award = awardArray.options[awardArray.selectedIndex].value;
+    }
+    else {
+      var award = document.getElementById("input-selected-award").value;
+    };
+    if (alreadyExistMilestone.checked == true){
+      var milestone = milestoneArray.options[milestoneArray.selectedIndex].value;
+    }
+    else {
+      var milestone = document.getElementById("input-selected-milestone").value
+    }
+    var date = document.getElementById("selected-milestone-date").value;
+    var json_arr = [];
+    json_arr.push(award);
+    json_arr.push(milestone);
+    json_arr.push(date);
+    json_str = JSON.stringify(json_arr)
+    if (path != null){
+      client.invoke("api_save_submission_file", path, json_str, (error, res) => {
+          if(error) {
+            console.error(error)
+          }
+          else {
+            document.getElementById("para-save-submission-status").innerHTML = "<span style='color: red;'>Done!</span>"
+          }
+        })
+     }}
+})
 
 ////////////////////End of Prepare Metadata Section////////////////////
 
@@ -511,11 +597,11 @@ bfDatasetSubtitle.addEventListener('keyup',  function(){
 })
 
 
-//////////////////////////////////
+//////////////////////////////////////////////
 // Operations calling to pysoda.py functions //
-//////////////////////////////////
+/////////////////////////////////////////////
 
-// Function to "Save" metadata to Excel spreadsheet
+// When users click "Save" button, the below generates Json files containing all the presaved metadata information
 saveAwardBtn.addEventListener('click', function(){
   // filter out empty rows
   json_arr = table_award.getData().filter(row => row["award-name"] !== undefined && row["award-number"] !== undefined);
@@ -527,7 +613,18 @@ saveAwardBtn.addEventListener('click', function(){
          var emessage = userError(error)
          document.getElementById("para-save-award-status").innerHTML = "<span style='color: red;'> " + emessage + "</span>"
        } else {
-         document.getElementById("para-save-award-status").innerHTML = "<span style='color: red;'>Saved!</span>"
+           client.invoke("api_load_awards", (error, res) => {
+                  if(error) {
+                    console.error(error)
+                  } else {
+                      var result = JSON.parse(res);
+                      removeOptions(awardArray);
+                      for (var i = 0; i < result.length; i++) {
+                           var opt = result[i]["award-name"].concat(" or ", result[i]["award-number"])
+                           addOption(awardArray, opt, opt)}
+                   }
+           });
+           document.getElementById("para-save-award-status").innerHTML = "<span style='color: red;'>Saved!</span>"
        }
    })
 });
@@ -556,43 +653,21 @@ saveMilestoneBtn.addEventListener('click', function(){
          console.error(error)
          var emessage = userError(error)
          document.getElementById("para-save-milestone-status").innerHTML = "<span style='color: red;'> " + emessage + "</span>"
-       } else {
-         console.log(document.getElementById("div-submission-spreadsheet").offsetWidth)
+     } else {
+         client.invoke("api_load_milestones", (error, res) => {
+                if(error) {
+                  console.error(error)
+                } else {
+                    var result = JSON.parse(res);
+                    removeOptions(milestoneArray);
+                    for (var i = 0; i < result.length; i++) {
+                       addOption(milestoneArray, result[i]['milestone'], result[i]['milestone'])}
+                   }
+         });
          document.getElementById("para-save-milestone-status").innerHTML = "<span style='color: red;'>Saved!</span>"
        }
    })
 });
-// Action when users click on "save" submission file
-saveSubmissionBtn.addEventListener('click', (event) => {
-  ipcRenderer.send('save-file-dialog-submission')
-  document.getElementById("para-save-submission-status").innerHTML = ""
-  clearStrings()
-});
-
-ipcRenderer.on('selected-savesubmissionfile', (event, path) => {
-  if (path.length > 0){
-    document.getElementById("para-save-submission-status").innerHTML = ""
-    json_arr = table_submission.getData();
-    json_val = [];
-    json_val.push(json_arr[0]["submission1"]);
-    json_val.push(json_arr[1]["submission1"]);
-    json_val.push(json_arr[2]["submission1"]);
-    console.log(json_val);
-    json_str = JSON.stringify(json_val);
-    // // Call python to save
-    if (path != null){
-        client.invoke("api_save_submission_file", path, json_str, (error, res) => {
-            if(error) {
-              console.error(error)
-              var emessage = userError(error)
-              document.getElementById("para-save-file-organization-status").innerHTML = "<span style='color: red;'> " + emessage + "</span>"
-            } else {
-              document.getElementById("para-save-file-organization-status").innerHTML = "Saved!"
-            }
-        })
-  }
-}
-})
 
 
 // Action when user click on "Save" file organization button

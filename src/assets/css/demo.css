@@ -254,13 +254,13 @@ input.add-new-info {
   width: 30%;
   padding: 4px;
   border: 1px solid #ccc;
-  border-radius: 3px;
-  resize: vertical;
+  border-radius: 2px;
+  /* resize: vertical; */
   font: inherit;
 }
 /*  Calender for Submission file */
 [type="date"] {
-  background:#fff url('../img/calender.png')  97% 50% no-repeat ;
+  background:#fff url('../img/calender1.png')  96% 50% no-repeat ;
 }
 [type="date"]::-webkit-inner-spin-button {
   display: none;
@@ -577,7 +577,7 @@ progress.progresstrack[value]::-webkit-progress-value {
 
 .preview {
   overflow: hidden;
-  width: 300px; 
+  width: 300px;
   height: 300px;
 /*  padding-bottom: 30%;*/
 }

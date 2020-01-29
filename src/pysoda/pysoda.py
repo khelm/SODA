@@ -307,13 +307,13 @@ def mycopyfile_with_metadata(src, dst, *, follow_symlinks=True):
     shutil.copystat(src, dst)
     return dst
 
-### Prepare metadata
+#################### Prepare Metadata Tab ###########################
+### Functions to save and load metadata
 HOMEPATH = expanduser("~")
 SAVED_INFO_PATH = join(HOMEPATH, "SODA", "METADATA")
 CON_FILEPATH = join(SAVED_INFO_PATH, "contributors.json")
 MILESTONE_FILEPATH = join(SAVED_INFO_PATH, "milestones.json")
 AWARD_FILEPATH = join(SAVED_INFO_PATH, "awards.json")
-
 
 def save_metadata(json_str, filepath):
     #Tabulator adds extra empty key,val pairs ("":"")
@@ -322,7 +322,6 @@ def save_metadata(json_str, filepath):
         makedirs(directory)
     with open(filepath, "w") as f:
         f.write(json_str)
-
 
 def load_metadata(filepath):
     with open(filepath) as f:
@@ -340,16 +339,15 @@ def save_milestones(json_str):
 def load_milestones():
     return load_metadata(MILESTONE_FILEPATH)
 
-## TODO: make save_attribute code reusable and modular
 def save_awards(json_str):
     return save_metadata(json_str, AWARD_FILEPATH)
 
 def load_awards():
     return load_metadata(AWARD_FILEPATH)
 
-### Prepare and save submission file
+### Save Submission file to submission.xlsx
 def save_submission_file(filepath, json_str):
-    source = r"C:\Users\Tram Ngo\Desktop\SRC\SODA\src\file_templates\submission.xlsx"
+    source = r"..\file_templates\submission.xlsx"
     destination = filepath
     shutil.copyfile(source, destination)
     # json array to python list
@@ -362,7 +360,8 @@ def save_submission_file(filepath, json_str):
     ws1["C4"] = val_arr[2]
 
     wb.save(destination)
-
+    
+######################### End of Prepare Metadata Tab ##########################
 
 ### Prepare dataset
 def save_file_organization(jsonpath, jsondescription, pathsavefileorganization):
