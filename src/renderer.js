@@ -273,7 +273,6 @@ var awardInfo = [
     }
   }
 ];
-// const picker = datepicker(".milestone-date")
 var milestoneInfo = [
   {formatter:"rownum", widthGrow: 1},
   {title:"Milestone", field:"milestone", editor:"input", widthGrow:5},
@@ -308,6 +307,32 @@ function addEmptyRow(table){
 addContributorBtn.addEventListener('click', function(){addEmptyRow(table_con)});
 addMilestoneBtn.addEventListener('click', function(){addEmptyRow(table_milestone)});
 addAwardBtn.addEventListener('click', function(){addEmptyRow(table_award)});
+
+/////Load Tables upon starting the app/////////
+client.invoke("api_load_milestones", (error, res) => {
+if (error) {
+  console.log(error)
+  }
+else {
+  table_milestone.setData(JSON.parse(res))
+  }
+});
+client.invoke("api_load_contributors", (error, res) => {
+if (error) {
+  console.log(error)
+  }
+else {
+  table_con.setData(JSON.parse(res))
+  }
+});
+client.invoke("api_load_awards", (error, res) => {
+if (error) {
+  console.log(error)
+  }
+else {
+  table_award.setData(JSON.parse(res));
+  }
+});
 
 /////////Prepare Submission File///////////////////////
 var submissionInfo = [

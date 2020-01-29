@@ -17,9 +17,6 @@
     <div class="demo">
         <div class="demo-wrapper">
           <button id="button-prepare-metadata-demo-toggle" class="js-container-target demo-toggle-button"> Prepare Metadata Information
-            <!-- <a style="padding:0px 0px 0px 10px">
-              <img class="nav-video" src="assets/img/play-video-icon.png">
-            </a> -->
             <div class="demo-meta u-avoid-clicks"> Edit and Save Information regarding Grant Number, Contributors, and Milestones for future use
             </div>
           </button>
@@ -99,7 +96,7 @@
           </div>
         </div>
       </div>
-
+<!–- This div is for Submission File Preparation Tab --!>
       <div class="demo">
         <div class="demo-wrapper">
           <button id="button-submission-demo-toggle" class="js-container-target demo-toggle-button"> Prepare your Submission file
@@ -108,20 +105,76 @@
             </a> -->
             <div class="demo-meta u-avoid-clicks"> Edit/Save the submission file to include in your dataset  </div>
           </button>
-          <div id="div-submission-file" class="demo-box">
-            <p> </p>
-            <div id="div-add-submission" align="center">
-              <h5> Specify information to include in the Submission file to your dataset</h5>
-              <div id="div-submission-spreadsheet" style="width:80%"></div>
-              <h5> </h5>
-              <div class="demo-controls">
-                <button id="button-save-submission" type="button" style="font-size: 1em; margin-left: 80px" class="demo-button">Save</button>
-                <p id='para-save-submission-status'> <p>
+          <div id="div-generate-submission-file" class="demo-box">
+              <h5> Award/Funding Number </h5>
+              <h6> </h6>
+              <form id='form-submission-1'>
+                <div>
+                  <input id="input-choose-existing-award" name="award-option" type="radio" class="with-style" value="existing" />
+                  <label for="input-choose-existing-award" class="labelradio">Choose from existing</label>
+                </div>
+                <div id="div-existing-award" style= "display: none">
+                  <div class="demo-controls" style="margin-left: 20px">
+                    <h6></h6>
+                    <select id="select-award" class="submission">
+                      <option>Choose Award</option>
+                    </select>
+                    <br>
+                  </div>
+                </div>
+                <div>
+                  <input id="input-new-award" name="award-option" type="radio" class="with-style" value="new" />
+                  <label for="input-new-award" class="labelradio"> Add Award</label>
+                </div>
+                <div id="div-new-award" style= "display: none">
+                  <div class="demo-controls" style="margin-left: 20px">
+                    <input id="input-selected-award" class="add-new-info">
+                    </input>
+                  </div>
+                </div>
+              </form>
+
+              <h5> Milestone </h5>
+              <h6> </h6>
+              <form id='form-submission-2'>
+                <div>
+                  <input id="input-choose-existing-milestone" name="milestone-option" type="radio" class="with-style" value="existing" />
+                  <label for="input-choose-existing-milestone" class="labelradio">Choose from existing</label>
+                </div>
+                <div id="div-existing-milestone" style= "display: none">
+                  <div class="demo-controls" style="margin-left: 20px">
+                    <select id="select-milestone" class="submission">
+                      <option>Choose Milestone</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <input id="input-new-milestone" name="milestone-option" type="radio" class="with-style" value="new" />
+                  <label for="input-new-milestone" class="labelradio"> Add Milestone</label>
+                </div>
+                <div id="div-new-milestone" style= "display: none">
+                  <div class="demo-controls" style="margin-left: 20px">
+                    <input id="selected-milestone" placeholder="Enter Milestone" class="add-new-info"></input>
+                  </div>
+                </div>
+              </form>
+
+              <h5> Milestone Completion Date </h5>
+              <form id='form-submission-3'style="margin-left: 10px">
+                <div class="demo-controls">
+                  <input id="selected-milestone-date" name="dateofbirth" placeholder="Enter Completion Date" type="date" class="add-new-info"></input>
+                </div>
+              </form>
+                <!-- <div class="demo-controls">
+                  <button id="button-save-submission" type="button" style="font-size: 1em; margin-left: 380px" class="demo-button">Save</button>
+                  <p id='para-save-submission-status'> <p>
+                </div> -->
+              <div id="div-submission-next-step" align="right">
+                <button id="button-submission-next-step" class="demo-button"> Next step </button>
               </div>
-            </div>
-            <div id="div-submission-next-step" align="right">
-              <button id="button-submission-next-step" class="demo-button"> Next step </button>
-            </div>
+
+
+
           </div>
         </div>
       </div>
