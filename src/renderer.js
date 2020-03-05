@@ -452,7 +452,11 @@ deleteAwardBtn.addEventListener('click', function() {
     fs.writeFileSync(awardPath, JSON.stringify(awardsJson));
     presavedAwardArray1.remove(presavedAwardArray1.selectedIndex);
     fs.writeFileSync(milestonePath, JSON.stringify(milestoneJson));
-    presavedAwardArray2.remove(presavedAwardArray2.selectedIndex);
+    for (var i=0; i<presavedAwardArray2.length; i++) {
+      if (presavedAwardArray2.options[i].value === value) {
+        presavedAwardArray2.remove(i);
+        }
+      }
     document.getElementById("div-show-milestone-info").style.display = "none";
     document.getElementById("para-delete-award-status").innerHTML = "<span style='color: black;'> " + "Deleted award number: " + value + "!" + "</span>"
   }
